@@ -1,0 +1,5 @@
+.idea/
+local.properties
+*.iml
+build/
+*~
