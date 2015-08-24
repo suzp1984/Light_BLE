@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,6 +66,9 @@ public class DeviceScanActivity extends AppCompatActivity {
 
     @Bind(R.id.recycler)
     RecyclerView mRecyclerView;
+
+    @Bind(R.id.swip_refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
 
     LeDeviceAdapter mLeDeviceAdapter;
 
@@ -106,6 +110,18 @@ public class DeviceScanActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                onRefreshSwipLayout();
+            }
+        });
+
+        mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         mHandler = new Handler();
 
@@ -217,5 +233,16 @@ public class DeviceScanActivity extends AppCompatActivity {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
         invalidateOptionsMenu();
+    }
+
+    private void onRefreshSwipLayout() {
+        scanLeDevice(true);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(false);
+            }
+        }, 2000);
     }
 }
