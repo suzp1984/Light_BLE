@@ -16,10 +16,14 @@
 
 package org.zpcat.ble;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,6 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.zpcat.ble.adapter.LeDeviceAdapter;
@@ -58,6 +63,7 @@ import butterknife.ButterKnife;
 public class DeviceScanActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothLeScanner mLeScanner;
     private boolean mScanning;
     private Handler mHandler;
 
@@ -76,22 +82,27 @@ public class DeviceScanActivity extends AppCompatActivity {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
-    // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-
+    private ScanCallback mNewBleScanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, final ScanResult result) {
+            super.onScanResult(callbackType, result);
+            runOnUiThread(new Runnable() {
                 @Override
-                public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-                    Log.e("Scan device rssi is " + rssi);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mLeDeviceAdapter.addDevice(device);
-                            mLeDeviceAdapter.notifyDataSetChanged();
-                        }
-                    });
+                public void run() {
+                    mLeDeviceAdapter.addDevice(result.getDevice());
+                    mLeDeviceAdapter.notifyDataSetChanged();
                 }
-            };
+            });
+        }
+
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,6 +148,7 @@ public class DeviceScanActivity extends AppCompatActivity {
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
+
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
@@ -216,22 +228,18 @@ public class DeviceScanActivity extends AppCompatActivity {
 
     private void scanLeDevice(final boolean enable) {
         if (enable) {
-            // Stops scanning after a pre-defined scan period.
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    invalidateOptionsMenu();
-                }
-            }, SCAN_PERIOD);
-
             mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
+
+            mLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+
+            mLeScanner.startScan(mNewBleScanCallback);
         } else {
             mScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+
+            mLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+            mLeScanner.stopScan(mNewBleScanCallback);
         }
+
         invalidateOptionsMenu();
     }
 
