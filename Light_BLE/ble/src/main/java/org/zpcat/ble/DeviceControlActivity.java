@@ -17,10 +17,7 @@
 package org.zpcat.ble;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.PendingIntent;
+
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 //import android.content.BroadcastReceiver;
@@ -32,6 +29,8 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +53,7 @@ import org.zpcat.ble.utils.Log;
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends Activity {
+public class DeviceControlActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
@@ -148,7 +147,7 @@ public class DeviceControlActivity extends Activity {
 
     private void showCharactWriteDialog() {
         DialogFragment newFrame = new BleCharacterDialogFragment();
-        newFrame.show(getFragmentManager(), "blewrite");
+        newFrame.show(getSupportFragmentManager(), "blewrite");
     }
 
     private void writeCharacteristic(BluetoothGattCharacteristic characteristic) {
