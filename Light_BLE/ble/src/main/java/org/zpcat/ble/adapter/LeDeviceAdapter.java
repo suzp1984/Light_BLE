@@ -3,6 +3,7 @@ package org.zpcat.ble.adapter;
 import org.zpcat.ble.R;
 
 import android.bluetooth.BluetoothDevice;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
 
     private final List<BluetoothDevice> mLeDevices = new ArrayList<>();
 
+    private DeviceItemClickListener mListener;
+
     @Override
     public DeviceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -30,11 +33,20 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
     }
 
     @Override
-    public void onBindViewHolder(DeviceViewHolder holder, int position) {
+    public void onBindViewHolder(DeviceViewHolder holder, final int position) {
         BluetoothDevice bt = mLeDevices.get(position);
 
         holder.deviceName.setText(bt.getName());
         holder.deviceAddress.setText(bt.getAddress());
+
+        holder.deviceCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onItemClicked(mLeDevices.get(position), position);
+                }
+            }
+        });
     }
 
     @Override
@@ -48,16 +60,26 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
         }
     }
 
+    public void setListener(DeviceItemClickListener listener) {
+        mListener = listener;
+    }
+
     public class DeviceViewHolder extends RecyclerView.ViewHolder {
 
         TextView deviceName;
         TextView deviceAddress;
+        CardView deviceCard;
 
         public DeviceViewHolder(View itemView) {
             super(itemView);
 
+            deviceCard = (CardView) itemView.findViewById(R.id.device_card);
             deviceName = (TextView) itemView.findViewById(R.id.device_name);
             deviceAddress = (TextView) itemView.findViewById(R.id.device_address);
         }
+    }
+
+    public interface DeviceItemClickListener {
+        void onItemClicked(BluetoothDevice device, int position);
     }
 }

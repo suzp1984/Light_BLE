@@ -121,6 +121,18 @@ public class DeviceScanActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLeDeviceAdapter.setListener(new LeDeviceAdapter.DeviceItemClickListener() {
+
+            @Override
+            public void onItemClicked(BluetoothDevice device, int position) {
+                Intent intent = new Intent(DeviceScanActivity.this, DeviceControlActivity.class);
+
+                intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
+                intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+
+                startActivity(intent);
+            }
+        });
 
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

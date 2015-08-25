@@ -16,6 +16,7 @@
 
 package org.zpcat.ble;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -161,7 +162,6 @@ public class DeviceControlActivity extends AppCompatActivity {
         mDataField.setText(R.string.no_data);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -387,6 +387,7 @@ public class DeviceControlActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ValidFragment")
     public class BleCharacterDialogFragment extends DialogFragment {
 
 
