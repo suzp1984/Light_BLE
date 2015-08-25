@@ -43,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.zpcat.ble.adapter.LeDeviceAdapter;
+import org.zpcat.ble.fragment.DeviceScanFragment;
 import org.zpcat.ble.utils.Log;
 
 import butterknife.Bind;
@@ -70,39 +72,12 @@ public class DeviceScanActivity extends AppCompatActivity {
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
-    @Bind(R.id.recycler)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swip_refresh_layout)
-    SwipeRefreshLayout mRefreshLayout;
-
-    LeDeviceAdapter mLeDeviceAdapter;
+    @Bind(R.id.content)
+    FrameLayout mContent;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
-
-    private ScanCallback mNewBleScanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, final ScanResult result) {
-            super.onScanResult(callbackType, result);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mLeDeviceAdapter.addDevice(result.getDevice());
-                    mLeDeviceAdapter.notifyDataSetChanged();
-                }
-            });
-        }
-
-        @Override
-        public void onBatchScanResults(List<ScanResult> results) {
-        }
-
-        @Override
-        public void onScanFailed(int errorCode) {
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,36 +90,6 @@ public class DeviceScanActivity extends AppCompatActivity {
             setSupportActionBar(mToolbar);
             mToolbar.setTitle(R.string.title_devices);
         }
-
-        mLeDeviceAdapter = new LeDeviceAdapter();
-        mRecyclerView.setAdapter(mLeDeviceAdapter);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mLeDeviceAdapter.setListener(new LeDeviceAdapter.DeviceItemClickListener() {
-
-            @Override
-            public void onItemClicked(BluetoothDevice device, int position) {
-                Intent intent = new Intent(DeviceScanActivity.this, DeviceControlActivity.class);
-
-                intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-                intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
-
-                startActivity(intent);
-            }
-        });
-
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                onRefreshSwipLayout();
-            }
-        });
-
-        mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_dark,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
 
         mHandler = new Handler();
 
@@ -168,6 +113,10 @@ public class DeviceScanActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.content, new DeviceScanFragment(), "scan")
+                .commit();
     }
 
     @Override
@@ -175,35 +124,6 @@ public class DeviceScanActivity extends AppCompatActivity {
         ButterKnife.unbind(this);
 
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        if (!mScanning) {
-            menu.findItem(R.id.menu_stop).setVisible(false);
-            menu.findItem(R.id.menu_scan).setVisible(true);
-            menu.findItem(R.id.menu_refresh).setActionView(null);
-        } else {
-            menu.findItem(R.id.menu_stop).setVisible(true);
-            menu.findItem(R.id.menu_scan).setVisible(false);
-            menu.findItem(R.id.menu_refresh).setActionView(
-                    R.layout.actionbar_indeterminate_progress);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_scan:
-                scanLeDevice(true);
-                break;
-            case R.id.menu_stop:
-                scanLeDevice(false);
-                break;
-        }
-        return true;
     }
 
     @Override
@@ -218,8 +138,6 @@ public class DeviceScanActivity extends AppCompatActivity {
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
         }
-
-        scanLeDevice(true);
     }
 
     @Override
@@ -235,34 +153,9 @@ public class DeviceScanActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        scanLeDevice(false);
     }
 
-    private void scanLeDevice(final boolean enable) {
-        if (enable) {
-            mScanning = true;
-
-            mLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-
-            mLeScanner.startScan(mNewBleScanCallback);
-        } else {
-            mScanning = false;
-
-            mLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-            mLeScanner.stopScan(mNewBleScanCallback);
-        }
-
-        invalidateOptionsMenu();
-    }
-
-    private void onRefreshSwipLayout() {
-        scanLeDevice(true);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(false);
-            }
-        }, 2000);
+    public BluetoothAdapter getBluetoothAdapter() {
+        return mBluetoothAdapter;
     }
 }
