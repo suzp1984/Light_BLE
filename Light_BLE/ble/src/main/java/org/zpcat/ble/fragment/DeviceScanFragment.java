@@ -1,11 +1,10 @@
 package org.zpcat.ble.fragment;
 
 import org.zpcat.ble.DeviceControlActivity;
-import org.zpcat.ble.DeviceScanActivity;
+import org.zpcat.ble.MainActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.adapter.LeDeviceAdapter;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -13,7 +12,6 @@ import android.bluetooth.le.ScanResult;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -111,13 +109,12 @@ public class DeviceScanFragment extends Fragment {
 
 
     private void scanLeDevice(final boolean enable) {
-        DeviceScanActivity activity = (DeviceScanActivity) getActivity();
+        MainActivity activity = (MainActivity) getActivity();
 
         if (enable) {
             mScanning = true;
 
             mLeScanner = activity.getBluetoothAdapter().getBluetoothLeScanner();
-
             mLeScanner.startScan(mNewBleScanCallback);
         } else {
             mScanning = false;

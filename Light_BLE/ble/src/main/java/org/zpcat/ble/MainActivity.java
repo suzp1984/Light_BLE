@@ -16,7 +16,6 @@
 
 package org.zpcat.ble;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -31,30 +30,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.zpcat.ble.adapter.LeDeviceAdapter;
 import org.zpcat.ble.fragment.DeviceScanFragment;
-import org.zpcat.ble.utils.Log;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,7 +43,7 @@ import butterknife.ButterKnife;
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
-public class DeviceScanActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mLeScanner;
