@@ -11,11 +11,11 @@
     tools:context="org.zpcat.ble.MainActivity">
 
     <TextView
-        android:id="@+id/host"
+        android:id="@+id/central"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="@string/host"
+        android:text="@string/central"
         android:textSize="40sp"
         android:textAlignment="center"
         android:background="@drawable/red_ripple"

@@ -1,7 +1,7 @@
 package org.zpcat.ble.fragment;
 
 import org.zpcat.ble.DeviceControlActivity;
-import org.zpcat.ble.HostActivity;
+import org.zpcat.ble.CentralActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.adapter.LeDeviceAdapter;
 
@@ -109,7 +109,7 @@ public class DeviceScanFragment extends Fragment {
 
 
     private void scanLeDevice(final boolean enable) {
-        HostActivity activity = (HostActivity) getActivity();
+        CentralActivity activity = (CentralActivity) getActivity();
 
         if (enable) {
             mScanning = true;

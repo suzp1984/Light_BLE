@@ -34,6 +34,6 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
-    <string name="host">Host</string>
+    <string name="central">Central</string>
     <string name="peripheral">Peripheral</string>
 </resources>

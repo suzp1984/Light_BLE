@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @OnClick(R.id.host)
-    public void startHostMode() {
-        startActivity(new Intent(this, HostActivity.class));
+    @OnClick(R.id.central)
+    public void startCentralMode() {
+        startActivity(new Intent(this, CentralActivity.class));
     }
 
     @OnClick(R.id.peripheral)
