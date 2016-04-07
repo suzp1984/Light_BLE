@@ -6,4 +6,8 @@
     <color name="dark_blue">#0a3d91</color>
     <!--Pink 500-->
     <color name="accent_500">#E91E63</color>
+
+    <color name="red">#ff0000</color>
+
+    <color name="blue">#0000ff</color>
 </resources>
