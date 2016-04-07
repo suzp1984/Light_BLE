@@ -25,14 +25,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HostActivity"></activity>
+        <activity android:name=".HostActivity"/>
         <activity android:name=".DeviceControlActivity" />
 
         <service
             android:name=".BluetoothLeService"
             android:enabled="true" />
 
-        <activity android:name=".PeripheralActivity"></activity>
+        <activity android:name=".PeripheralActivity"/>
     </application>
 
 </manifest>
