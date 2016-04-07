@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
-public class MainActivity extends AppCompatActivity {
+public class HostActivity extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mLeScanner;
