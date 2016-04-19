@@ -5,6 +5,7 @@ import org.zpcat.ble.R;
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
     @Override
     public void onBindViewHolder(DeviceViewHolder holder, final int position) {
         BluetoothDevice bt = mLeDevices.get(position);
+        Log.d("LeDeviceAdapter", "position(" + position + "), " + bt.toString());
 
         holder.deviceName.setText(bt.getName());
         holder.deviceAddress.setText(bt.getAddress());

@@ -17,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,13 @@ public class DeviceScanFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         scanLeDevice(true);
     }
+
+   @Override
+   public void onPause() {
+       super.onPause();
+
+       scanLeDevice(false);
+   }
 
 
     private void scanLeDevice(final boolean enable) {

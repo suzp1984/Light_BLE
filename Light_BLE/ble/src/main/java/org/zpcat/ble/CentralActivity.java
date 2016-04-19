@@ -59,13 +59,13 @@ public class CentralActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.device_scan);
+        setContentView(R.layout.central_mode);
 
         ButterKnife.bind(this);
 
         if (mToolbar != null) {
+            mToolbar.setTitle(R.string.central_mode);
             setSupportActionBar(mToolbar);
-            mToolbar.setTitle(R.string.title_devices);
         }
 
         mHandler = new Handler();

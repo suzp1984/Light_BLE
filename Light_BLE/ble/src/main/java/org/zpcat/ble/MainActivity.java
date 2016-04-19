@@ -1,14 +1,19 @@
 package org.zpcat.ble;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import org.zpcat.ble.fragment.PermissionAgreeFragment;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -16,6 +21,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BT = 1;
+    public static final int REQUEST_LOCATION_CODE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +64,63 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        //checkLocationPermission();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
     public void onDestroy() {
         ButterKnife.unbind(this);
 
         super.onDestroy();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION_CODE:
+                if (grantResults.length > 0) {
+                    //great;
+                }
+        }
+    }
+
     @OnClick(R.id.central)
     public void startCentralMode() {
-        startActivity(new Intent(this, CentralActivity.class));
+        if (checkLocationPermission()) {
+            startActivity(new Intent(this, CentralActivity.class));
+        }
     }
 
     @OnClick(R.id.peripheral)
     public void startPeripheralMode() {
         startActivity(new Intent(this, PeripheralActivity.class));
+    }
+
+    private boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                PermissionAgreeFragment dialog = new PermissionAgreeFragment();
+                dialog.show(getSupportFragmentManager(), "Location Permission");
+            } else {
+                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_CODE);
+            }
+
+            return false;
+        } else {
+            return true;
+        }
     }
 }
