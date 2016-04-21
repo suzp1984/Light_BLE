@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import org.zpcat.ble.fragment.PermissionAgreeFragment;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -23,9 +25,15 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     public static final int REQUEST_LOCATION_CODE = 10;
 
+    @Inject BluetoothManager mBluetoothManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        BLEApplication bleApplication = (BLEApplication) getApplication();
+        bleApplication.getApplicationComponent().inject(this);
+
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
@@ -39,10 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-
+        BluetoothAdapter bluetoothAdapter = mBluetoothManager.getAdapter();
 
         // Checks if Bluetooth is enabled
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
