@@ -13,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
+
 import org.zpcat.ble.fragment.PermissionAgreeFragment;
 
 import javax.inject.Inject;
@@ -110,6 +113,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, PeripheralActivity.class));
     }
 
+    @OnClick(R.id.about)
+    public void startAboutLibrary() {
+        new LibsBuilder().withActivityStyle(Libs.ActivityStyle.DARK)
+                .start(this);
+    }
+
     private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED ||
@@ -128,4 +137,5 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
+
 }
