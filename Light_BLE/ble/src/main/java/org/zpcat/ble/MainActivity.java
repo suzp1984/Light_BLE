@@ -116,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.about)
     public void startAboutLibrary() {
         new LibsBuilder().withActivityStyle(Libs.ActivityStyle.DARK)
+                .withAboutIconShown(true)
+                .withAboutVersionShown(true)
+                .withAboutDescription("Good people create those good stuff.")
                 .start(this);
     }
 
