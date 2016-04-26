@@ -1,7 +1,7 @@
 package org.zpcat.ble.fragment;
 
+import org.zpcat.ble.BLEApplication;
 import org.zpcat.ble.DeviceControlActivity;
-import org.zpcat.ble.CentralActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.adapter.LeDeviceAdapter;
 
@@ -17,12 +17,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,9 +41,11 @@ public class DeviceScanFragment extends Fragment {
 
     private LeDeviceAdapter mLeDeviceAdapter;
     private boolean mScanning;
-    private BluetoothLeScanner mLeScanner;
 
-    private ScanCallback mNewBleScanCallback = new ScanCallback() {
+    @Inject
+    BluetoothLeScanner mLeScanner;
+
+    private ScanCallback mBleScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, final ScanResult result) {
             super.onScanResult(callbackType, result);
@@ -67,6 +70,10 @@ public class DeviceScanFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
+        BLEApplication bleApplication = (BLEApplication) getActivity().getApplication();
+        bleApplication.getApplicationComponent().inject(this);
+
         View view = inflater.inflate(R.layout.device_scan_fragment, container, false);
         ButterKnife.bind(this, view);
 
@@ -117,18 +124,15 @@ public class DeviceScanFragment extends Fragment {
 
 
     private void scanLeDevice(final boolean enable) {
-        CentralActivity activity = (CentralActivity) getActivity();
 
         if (enable) {
             mScanning = true;
 
-            mLeScanner = activity.getBluetoothAdapter().getBluetoothLeScanner();
-            mLeScanner.startScan(mNewBleScanCallback);
+            mLeScanner.startScan(mBleScanCallback);
         } else {
             mScanning = false;
 
-            mLeScanner = activity.getBluetoothAdapter().getBluetoothLeScanner();
-            mLeScanner.stopScan(mNewBleScanCallback);
+            mLeScanner.stopScan(mBleScanCallback);
         }
     }
 

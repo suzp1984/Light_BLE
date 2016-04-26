@@ -18,13 +18,9 @@ package org.zpcat.ble;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +28,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import org.zpcat.ble.fragment.DeviceScanFragment;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,10 +39,8 @@ import butterknife.ButterKnife;
  */
 public class CentralActivity extends AppCompatActivity {
 
-    private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothLeScanner mLeScanner;
-    private boolean mScanning;
-    private Handler mHandler;
+    @Inject
+    BluetoothAdapter mBluetoothAdapter;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -59,6 +55,9 @@ public class CentralActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BLEApplication bleApplication = (BLEApplication) getApplication();
+        bleApplication.getApplicationComponent().inject(this);
+
         setContentView(R.layout.central_mode);
 
         ButterKnife.bind(this);
@@ -68,21 +67,12 @@ public class CentralActivity extends AppCompatActivity {
             setSupportActionBar(mToolbar);
         }
 
-        mHandler = new Handler();
-
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
         }
-
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
-
 
         // Checks if Bluetooth is enabled
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
