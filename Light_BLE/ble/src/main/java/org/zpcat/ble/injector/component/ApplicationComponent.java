@@ -1,5 +1,6 @@
 package org.zpcat.ble.injector.component;
 
+import org.zpcat.ble.BluetoothLeService;
 import org.zpcat.ble.CentralActivity;
 import org.zpcat.ble.MainActivity;
 import org.zpcat.ble.fragment.DeviceScanFragment;
@@ -19,4 +20,5 @@ public interface ApplicationComponent {
     void inject(MainActivity activity);
     void inject(CentralActivity activity);
     void inject(DeviceScanFragment fragment);
+    void inject(BluetoothLeService service);
 }
