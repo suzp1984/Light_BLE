@@ -4,6 +4,7 @@ import org.zpcat.ble.DeviceControlActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.adapter.LeDeviceAdapter;
 import org.zpcat.ble.ui.base.BaseFragment;
+import org.zpcat.ble.ui.base.BasePresenter;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +25,9 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by moses on 8/25/15.
- */
 public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
+
+    private final int BLE_SCAN_PEROID = 10000;
 
     @Bind(R.id.recycler)
     RecyclerView mRecyclerView;
@@ -126,18 +127,25 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
 
     private void scanLeDevice(final boolean enable) {
 
-        mCentralPresenter.scanBLEPeripheral(enable);
+        try {
+            mCentralPresenter.scanBLEPeripheral(enable);
+        } catch (BasePresenter.MvpViewNotAttachedException e) {
+            Log.e(DeviceScanFragment.class.getName(), e.toString());
+            return;
+        }
+
+        if (enable) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mRefreshLayout.setRefreshing(false);
+                    scanLeDevice(false);
+                }
+            }, BLE_SCAN_PEROID);
+        }
     }
 
     private void onRefreshSwipLayout() {
         scanLeDevice(true);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(false);
-                scanLeDevice(false);
-            }
-        }, 2000);
     }
 }
