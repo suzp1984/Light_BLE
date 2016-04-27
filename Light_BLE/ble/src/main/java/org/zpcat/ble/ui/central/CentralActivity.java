@@ -22,14 +22,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import org.zpcat.ble.BLEApplication;
 import org.zpcat.ble.R;
-import org.zpcat.ble.fragment.DeviceScanFragment;
 import org.zpcat.ble.ui.base.BaseActivity;
 
 import javax.inject.Inject;

@@ -7,9 +7,12 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.zpcat.ble.data.BLEDataServer;
+import org.zpcat.ble.data.DataManager;
 import org.zpcat.ble.injector.ApplicationContext;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -50,4 +53,10 @@ public class ApplicationModule {
     public BluetoothLeScanner provideBluetoothLeScanner(@NonNull BluetoothAdapter btAdapter) {
         return btAdapter.getBluetoothLeScanner();
     }
+
+    /*@Singleton
+    @Provides
+    public DataManager provideDataManager(BLEDataServer bleDataServer) {
+        return new DataManager(bleDataServer);
+    }*/
 }

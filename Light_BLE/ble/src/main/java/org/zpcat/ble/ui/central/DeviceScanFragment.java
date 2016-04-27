@@ -1,14 +1,16 @@
-package org.zpcat.ble.fragment;
+package org.zpcat.ble.ui.central;
 
 import org.zpcat.ble.BLEApplication;
 import org.zpcat.ble.DeviceControlActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.adapter.LeDeviceAdapter;
+import org.zpcat.ble.ui.base.BaseFragment;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,7 +33,7 @@ import butterknife.ButterKnife;
 /**
  * Created by moses on 8/25/15.
  */
-public class DeviceScanFragment extends Fragment {
+public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
 
     @Bind(R.id.recycler)
     RecyclerView mRecyclerView;
@@ -40,12 +42,14 @@ public class DeviceScanFragment extends Fragment {
     SwipeRefreshLayout mRefreshLayout;
 
     private LeDeviceAdapter mLeDeviceAdapter;
-    private boolean mScanning;
+
+   /* @Inject
+    BluetoothLeScanner mLeScanner;*/
 
     @Inject
-    BluetoothLeScanner mLeScanner;
+    CentralPresenter mCentralPresenter;
 
-    private ScanCallback mBleScanCallback = new ScanCallback() {
+/*    private ScanCallback mBleScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, final ScanResult result) {
             super.onScanResult(callbackType, result);
@@ -65,14 +69,18 @@ public class DeviceScanFragment extends Fragment {
         @Override
         public void onScanFailed(int errorCode) {
         }
-    };
+    };*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        getFragmentComponent().inject(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-
-        BLEApplication bleApplication = (BLEApplication) getActivity().getApplication();
-        bleApplication.getApplicationComponent().inject(this);
 
         View view = inflater.inflate(R.layout.device_scan_fragment, container, false);
         ButterKnife.bind(this, view);
@@ -111,29 +119,54 @@ public class DeviceScanFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    public void onStart() {
+        super.onStart();
+
+        mCentralPresenter.attachView(this);
         scanLeDevice(true);
     }
 
-   @Override
-   public void onPause() {
-       super.onPause();
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
-       scanLeDevice(false);
-   }
+    @Override
+    public void onPause() {
+        super.onPause();
 
+        scanLeDevice(false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        mCentralPresenter.detachView();
+    }
+
+    @Override
+    public void showBLEDevice(BluetoothDevice bt) {
+        // maybe running in UI thread
+        mLeDeviceAdapter.addDevice(bt);
+        mLeDeviceAdapter.notifyDataSetChanged();
+    }
 
     private void scanLeDevice(final boolean enable) {
 
+        mCentralPresenter.scanBLEPeripheral(enable);
+        /*
         if (enable) {
-            mScanning = true;
 
             mLeScanner.startScan(mBleScanCallback);
         } else {
-            mScanning = false;
 
             mLeScanner.stopScan(mBleScanCallback);
-        }
+        }*/
     }
 
     private void onRefreshSwipLayout() {
@@ -143,7 +176,9 @@ public class DeviceScanFragment extends Fragment {
             @Override
             public void run() {
                 mRefreshLayout.setRefreshing(false);
+                scanLeDevice(false);
             }
         }, 2000);
     }
+
 }

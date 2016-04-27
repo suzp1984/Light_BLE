@@ -2,10 +2,12 @@ package org.zpcat.ble.injector.component;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
 
 import org.zpcat.ble.BluetoothLeService;
-import org.zpcat.ble.ui.central.CentralActivity;
-import org.zpcat.ble.fragment.DeviceScanFragment;
+import org.zpcat.ble.data.BLEDataServer;
+import org.zpcat.ble.data.DataManager;
+import org.zpcat.ble.ui.central.DeviceScanFragment;
 import org.zpcat.ble.injector.module.ApplicationModule;
 
 import javax.inject.Singleton;
@@ -19,9 +21,11 @@ import dagger.Component;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    void inject(DeviceScanFragment fragment);
     void inject(BluetoothLeService service);
 
     BluetoothManager bluetoothManager();
     BluetoothAdapter bluetoothAdapter();
+    BluetoothLeScanner bluetoothLeScanner();
+    DataManager dataManager();
+    BLEDataServer bleDataServer();
 }
