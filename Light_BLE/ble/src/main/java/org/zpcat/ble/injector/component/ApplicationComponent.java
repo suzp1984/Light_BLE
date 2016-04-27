@@ -1,8 +1,9 @@
 package org.zpcat.ble.injector.component;
 
+import android.bluetooth.BluetoothManager;
+
 import org.zpcat.ble.BluetoothLeService;
 import org.zpcat.ble.CentralActivity;
-import org.zpcat.ble.ui.main.MainActivity;
 import org.zpcat.ble.fragment.DeviceScanFragment;
 import org.zpcat.ble.injector.module.ApplicationModule;
 
@@ -17,8 +18,9 @@ import dagger.Component;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    void inject(MainActivity activity);
     void inject(CentralActivity activity);
     void inject(DeviceScanFragment fragment);
     void inject(BluetoothLeService service);
+
+    BluetoothManager bluetoothManager();
 }

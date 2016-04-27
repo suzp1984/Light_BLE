@@ -4,42 +4,40 @@ import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
-import org.zpcat.ble.BLEApplication;
 import org.zpcat.ble.CentralActivity;
 import org.zpcat.ble.PeripheralActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.fragment.PermissionAgreeFragment;
+import org.zpcat.ble.ui.base.BaseActivity;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements MainMvpView {
+public class MainActivity extends BaseActivity implements MainMvpView {
 
     private static final int REQUEST_ENABLE_BT = 1;
     public static final int REQUEST_LOCATION_CODE = 10;
 
     @Inject BluetoothManager mBluetoothManager;
+    @Inject MainPresenter mMainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        BLEApplication bleApplication = (BLEApplication) getApplication();
-        bleApplication.getApplicationComponent().inject(this);
+        getActivityComponent().inject(this);
 
         setContentView(R.layout.activity_main);
 
@@ -80,12 +78,14 @@ public class MainActivity extends AppCompatActivity implements MainMvpView {
         super.onResume();
 
         //checkLocationPermission();
+        mMainPresenter.attachView(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
+        mMainPresenter.detachView();
     }
 
     @Override
