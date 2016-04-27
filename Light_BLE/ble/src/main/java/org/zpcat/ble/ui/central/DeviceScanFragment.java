@@ -1,20 +1,15 @@
 package org.zpcat.ble.ui.central;
 
-import org.zpcat.ble.BLEApplication;
 import org.zpcat.ble.DeviceControlActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.adapter.LeDeviceAdapter;
 import org.zpcat.ble.ui.base.BaseFragment;
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,8 +17,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -43,33 +36,8 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
 
     private LeDeviceAdapter mLeDeviceAdapter;
 
-   /* @Inject
-    BluetoothLeScanner mLeScanner;*/
-
     @Inject
     CentralPresenter mCentralPresenter;
-
-/*    private ScanCallback mBleScanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, final ScanResult result) {
-            super.onScanResult(callbackType, result);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mLeDeviceAdapter.addDevice(result.getDevice());
-                    mLeDeviceAdapter.notifyDataSetChanged();
-                }
-            });
-        }
-
-        @Override
-        public void onBatchScanResults(List<ScanResult> results) {
-        }
-
-        @Override
-        public void onScanFailed(int errorCode) {
-        }
-    };*/
 
     @Override
     public void onAttach(Context context) {
@@ -159,14 +127,6 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
     private void scanLeDevice(final boolean enable) {
 
         mCentralPresenter.scanBLEPeripheral(enable);
-        /*
-        if (enable) {
-
-            mLeScanner.startScan(mBleScanCallback);
-        } else {
-
-            mLeScanner.stopScan(mBleScanCallback);
-        }*/
     }
 
     private void onRefreshSwipLayout() {
@@ -180,5 +140,4 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
             }
         }, 2000);
     }
-
 }

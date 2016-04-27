@@ -33,12 +33,15 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
     @Override
     public void detachView() {
         super.detachView();
+        if (mScanSubscription != null) {
+            mScanSubscription.unsubscribe();
+        }
     }
 
     public void scanBLEPeripheral(boolean enabled) {
         checkViewAttached();
 
-        /*mScanSubscription = mDataManager.scanBLEPeripheral(enabled)
+        mScanSubscription = mDataManager.scanBLEPeripheral(enabled)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<BluetoothDevice>() {
@@ -56,7 +59,6 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
                     public void onNext(BluetoothDevice bluetoothDevice) {
                         getMvpView().showBLEDevice(bluetoothDevice);
                     }
-                });*/
-
+                });
     }
 }
