@@ -2,7 +2,7 @@ package org.zpcat.ble.injector.component;
 
 import org.zpcat.ble.BluetoothLeService;
 import org.zpcat.ble.CentralActivity;
-import org.zpcat.ble.MainActivity;
+import org.zpcat.ble.ui.main.MainActivity;
 import org.zpcat.ble.fragment.DeviceScanFragment;
 import org.zpcat.ble.injector.module.ApplicationModule;
 

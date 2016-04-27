@@ -8,7 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
-import org.zpcat.ble.MainActivity;
+import org.zpcat.ble.ui.main.MainActivity;
 
 public class PermissionAgreeFragment extends DialogFragment {
 

@@ -1,4 +1,4 @@
-package org.zpcat.ble;
+package org.zpcat.ble.ui.main;
 
 import android.Manifest;
 import android.app.Activity;
@@ -16,6 +16,10 @@ import android.widget.Toast;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
+import org.zpcat.ble.BLEApplication;
+import org.zpcat.ble.CentralActivity;
+import org.zpcat.ble.PeripheralActivity;
+import org.zpcat.ble.R;
 import org.zpcat.ble.fragment.PermissionAgreeFragment;
 
 import javax.inject.Inject;
@@ -23,7 +27,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainMvpView {
 
     private static final int REQUEST_ENABLE_BT = 1;
     public static final int REQUEST_LOCATION_CODE = 10;
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
     @OnClick(R.id.central)
     public void startCentralMode() {
         if (checkLocationPermission()) {
@@ -108,11 +113,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
     @OnClick(R.id.peripheral)
     public void startPeripheralMode() {
         startActivity(new Intent(this, PeripheralActivity.class));
     }
 
+    @Override
     @OnClick(R.id.about)
     public void startAboutLibrary() {
         new LibsBuilder().withActivityStyle(Libs.ActivityStyle.DARK)
