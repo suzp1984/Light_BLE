@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.zpcat.ble;
+package org.zpcat.ble.ui.central;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -27,7 +27,10 @@ import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import org.zpcat.ble.BLEApplication;
+import org.zpcat.ble.R;
 import org.zpcat.ble.fragment.DeviceScanFragment;
+import org.zpcat.ble.ui.base.BaseActivity;
 
 import javax.inject.Inject;
 
@@ -37,7 +40,7 @@ import butterknife.ButterKnife;
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
-public class CentralActivity extends AppCompatActivity {
+public class CentralActivity extends BaseActivity {
 
     @Inject
     BluetoothAdapter mBluetoothAdapter;
@@ -55,8 +58,8 @@ public class CentralActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BLEApplication bleApplication = (BLEApplication) getApplication();
-        bleApplication.getApplicationComponent().inject(this);
+
+        getActivityComponent().inject(this);
 
         setContentView(R.layout.central_mode);
 

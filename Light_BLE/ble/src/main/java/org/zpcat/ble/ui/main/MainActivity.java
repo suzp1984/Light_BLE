@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
-import org.zpcat.ble.CentralActivity;
+import org.zpcat.ble.ui.central.CentralActivity;
 import org.zpcat.ble.PeripheralActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.fragment.PermissionAgreeFragment;
