@@ -2,6 +2,7 @@ package org.zpcat.ble.ui.central;
 
 import android.bluetooth.BluetoothDevice;
 
+import org.zpcat.ble.data.BLEDataServer;
 import org.zpcat.ble.ui.base.MvpView;
 
 /**
@@ -9,4 +10,5 @@ import org.zpcat.ble.ui.base.MvpView;
  */
 public interface CentralMvpView extends MvpView {
     void showBLEDevice(BluetoothDevice bt);
+    void showBLEData(BLEDataServer.BLEData data);
 }

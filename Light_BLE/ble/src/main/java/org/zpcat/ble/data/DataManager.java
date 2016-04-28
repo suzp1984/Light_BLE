@@ -24,4 +24,8 @@ public class DataManager {
     public Observable<BluetoothDevice> scanBLEPeripheral(boolean enabled) {
         return mBLEServer.scanBLEPeripheral(enabled);
     }
+
+    public Observable<BLEDataServer.BLEData> connectGatt(BluetoothDevice device) {
+        return mBLEServer.connect(device);
+    }
 }

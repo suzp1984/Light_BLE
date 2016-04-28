@@ -1,6 +1,8 @@
 package org.zpcat.ble.adapter;
 
+import org.w3c.dom.Text;
 import org.zpcat.ble.R;
+import org.zpcat.ble.data.BLEDataServer;
 
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.CardView;
@@ -12,8 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.zip.Inflater;
+import java.util.Map;
 
 /**
  * Created by moses on 8/24/15.
@@ -21,6 +24,7 @@ import java.util.zip.Inflater;
 public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.DeviceViewHolder> {
 
     private final List<BluetoothDevice> mLeDevices = new ArrayList<>();
+    private final Map<BluetoothDevice, BLEDataServer.BLEData> mBLEDataMap = new HashMap<>();
 
     private DeviceItemClickListener mListener;
 
@@ -30,16 +34,30 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
                 .inflate(R.layout.listitem_device, parent, false);
 
         DeviceViewHolder viewHolder = new DeviceViewHolder(v);
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(DeviceViewHolder holder, final int position) {
         BluetoothDevice bt = mLeDevices.get(position);
+        BLEDataServer.BLEData data = mBLEDataMap.get(bt);
         Log.d("LeDeviceAdapter", "position(" + position + "), " + bt.toString());
 
-        holder.deviceName.setText(bt.getName());
-        holder.deviceAddress.setText(bt.getAddress());
+        holder.deviceName.setText("Name: " + bt.getName());
+        holder.deviceAddress.setText("Address: " + bt.getAddress());
+
+        if (data != null) {
+            if (data.connectedState) {
+                holder.deviceCard.setBackgroundResource(R.color.colorPrimary);
+                holder.deviceState.setText("Connected");
+            } else {
+                holder.deviceCard.setBackgroundResource(R.color.disconnect);
+                holder.deviceState.setText("Disconnected");
+            }
+
+            holder.deviceRSSI.setText(" " + data.rssi);
+        }
 
         holder.deviceCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,10 +74,23 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
         return mLeDevices.size();
     }
 
+    public BluetoothDevice getBtDeviceAtIndex(int index) {
+        if (index < mLeDevices.size()) {
+            return mLeDevices.get(index);
+        }
+
+        return null;
+    }
+
     public void addDevice(BluetoothDevice device) {
         if (device != null && !mLeDevices.contains(device)) {
             mLeDevices.add(device);
         }
+
+    }
+
+    public void showBLEData(BLEDataServer.BLEData data) {
+        mBLEDataMap.put(data.device, data);
     }
 
     public void setListener(DeviceItemClickListener listener) {
@@ -70,6 +101,8 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
 
         TextView deviceName;
         TextView deviceAddress;
+        TextView deviceState;
+        TextView deviceRSSI;
         CardView deviceCard;
 
         public DeviceViewHolder(View itemView) {
@@ -78,6 +111,8 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
             deviceCard = (CardView) itemView.findViewById(R.id.device_card);
             deviceName = (TextView) itemView.findViewById(R.id.device_name);
             deviceAddress = (TextView) itemView.findViewById(R.id.device_address);
+            deviceState = (TextView) itemView.findViewById(R.id.connection_state);
+            deviceRSSI = (TextView) itemView.findViewById(R.id.rssi);
         }
     }
 

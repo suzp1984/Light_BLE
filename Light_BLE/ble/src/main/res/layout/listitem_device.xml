@@ -23,8 +23,8 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="2dp">
 
@@ -40,6 +40,20 @@
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textSize="12dp"/>
+        <TextView
+            android:id="@+id/rssi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textAlignment="textStart"
+            android:text="RSSI: "/>
+        <TextView
+            android:id="@+id/connection_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:text="State: "/>
+
     </LinearLayout>
 
 

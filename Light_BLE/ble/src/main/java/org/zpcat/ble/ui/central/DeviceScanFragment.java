@@ -3,6 +3,7 @@ package org.zpcat.ble.ui.central;
 import org.zpcat.ble.DeviceControlActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.adapter.LeDeviceAdapter;
+import org.zpcat.ble.data.BLEDataServer;
 import org.zpcat.ble.ui.base.BaseFragment;
 import org.zpcat.ble.ui.base.BasePresenter;
 
@@ -72,6 +73,7 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
             }
         });
 
+
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -122,6 +124,14 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
     public void showBLEDevice(BluetoothDevice bt) {
         // maybe running in UI thread
         mLeDeviceAdapter.addDevice(bt);
+        mLeDeviceAdapter.notifyDataSetChanged();
+
+        mCentralPresenter.connectGatt(bt);
+    }
+
+    @Override
+    public void showBLEData(BLEDataServer.BLEData data) {
+        mLeDeviceAdapter.showBLEData(data);
         mLeDeviceAdapter.notifyDataSetChanged();
     }
 
