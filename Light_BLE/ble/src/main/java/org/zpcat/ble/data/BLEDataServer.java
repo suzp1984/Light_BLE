@@ -178,15 +178,16 @@ public class BLEDataServer {
             @Override
             public void call(Subscriber<? super BLEData> subscriber) {
 
+                subscriber.onStart();
                 BluetoothGatt gatt = findBluetoothGatt(device);
 
                 if (gatt == null) {
                     gatt = device.connectGatt(mContext, false, mGattCallback);
+                } else {
+                    subscriber.onNext(findBLEData(gatt));
                 }
 
                 mGattMap.put((Subscriber<BLEData>) subscriber, gatt);
-
-                subscriber.onStart();
             }
         });
     }

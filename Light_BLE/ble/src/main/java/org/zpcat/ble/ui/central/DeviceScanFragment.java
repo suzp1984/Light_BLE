@@ -1,6 +1,5 @@
 package org.zpcat.ble.ui.central;
 
-import org.zpcat.ble.DeviceControlActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.adapter.LeDeviceAdapter;
 import org.zpcat.ble.data.BLEDataServer;

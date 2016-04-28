@@ -27,13 +27,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.central.CentralActivity"/>
-        <activity android:name=".DeviceControlActivity" />
+        <activity android:name=".ui.central.DeviceControlActivity" />
 
         <service
             android:name=".BluetoothLeService"
             android:enabled="true" />
 
-        <activity android:name=".PeripheralActivity"/>
+        <activity android:name=".ui.peripheral.PeripheralActivity"/>
     </application>
 
 </manifest>

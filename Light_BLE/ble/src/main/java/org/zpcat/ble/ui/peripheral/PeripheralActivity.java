@@ -1,7 +1,9 @@
-package org.zpcat.ble;
+package org.zpcat.ble.ui.peripheral;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import org.zpcat.ble.R;
 
 public class PeripheralActivity extends AppCompatActivity {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.zpcat.ble;
+package org.zpcat.ble.ui.central;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -23,9 +23,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 //import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +45,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.zpcat.ble.BluetoothLeService;
+import org.zpcat.ble.R;
+import org.zpcat.ble.SampleGattAttributes;
 import org.zpcat.ble.utils.Log;
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
