@@ -65,6 +65,7 @@ public class CentralActivity extends BaseActivity {
         if (mToolbar != null) {
             mToolbar.setTitle(R.string.central_mode);
             setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         // Use this check to determine whether BLE is supported on the device.  Then you can

@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
@@ -60,6 +61,9 @@ public class CentralDetailsActivity extends BaseActivity implements CentralMvpVi
 
     @Bind(R.id.signal_rssi)
     TextView mRssiField;
+
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
 
     @Inject
     CentralPresenter mCentralPresenter;
@@ -120,9 +124,15 @@ public class CentralDetailsActivity extends BaseActivity implements CentralMvpVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivityComponent().inject(this);
-        setContentView(R.layout.gatt_services_characteristics);
+        setContentView(R.layout.central_gatt_services);
 
         ButterKnife.bind(this);
+
+        if (mToolbar != null) {
+            mToolbar.setTitle("Gatt Services");
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -137,6 +147,7 @@ public class CentralDetailsActivity extends BaseActivity implements CentralMvpVi
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         mDataField = (TextView) findViewById(R.id.data_value);
         mRssiField = (TextView) findViewById(R.id.signal_rssi);
+
     }
 
     @Override
