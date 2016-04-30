@@ -63,15 +63,14 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
 
             @Override
             public void onItemClicked(BluetoothDevice device, int position) {
-                Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
+                Intent intent = new Intent(getActivity(), CentralDetailsActivity.class);
 
-                intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-                intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+                intent.putExtra(CentralDetailsActivity.EXTRAS_DEVICE_NAME, device.getName());
+                intent.putExtra(CentralDetailsActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
 
                 startActivity(intent);
             }
         });
-
 
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -93,6 +92,7 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
     public void onStart() {
         super.onStart();
 
