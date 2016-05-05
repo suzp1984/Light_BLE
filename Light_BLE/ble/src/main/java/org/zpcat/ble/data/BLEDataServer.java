@@ -197,14 +197,8 @@ public class BLEDataServer {
         });
     }
 
-    public List<BluetoothDevice> getRemoteDevices() {
-        List<BluetoothDevice> devices = new ArrayList<>();
-
-        for (BLEData data : mBLEDatas) {
-            devices.add(data.device);
-        }
-
-        return devices;
+    public List<BLEData> getRemoteBLEDatas() {
+        return mBLEDatas;
     }
 
     public boolean readRemoteRssi(BluetoothDevice device) {

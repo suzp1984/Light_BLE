@@ -138,13 +138,14 @@ public class CentralScanFragment extends BaseFragment implements CentralMvpView 
         org.zpcat.ble.utils.Log.d("onStart");
         mCentralPresenter.attachView(this);
         scanLeDevice(true);
+        startReadRssi();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         org.zpcat.ble.utils.Log.d("onResume");
-        startReadRssi();
+        mCentralPresenter.getRemoteDevices();
     }
 
     @Override
@@ -152,13 +153,14 @@ public class CentralScanFragment extends BaseFragment implements CentralMvpView 
         super.onPause();
         org.zpcat.ble.utils.Log.d("onPause");
         scanLeDevice(false);
-        stopReadRssi();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
         org.zpcat.ble.utils.Log.d("onStop");
+        stopReadRssi();
         mLeDeviceAdapter.clearDevices();
         mLeDeviceAdapter.notifyDataSetChanged();
         mCentralPresenter.detachView();

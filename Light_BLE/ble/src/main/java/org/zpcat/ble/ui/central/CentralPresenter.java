@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import org.zpcat.ble.data.BLEDataServer;
 import org.zpcat.ble.data.DataManager;
 import org.zpcat.ble.ui.base.BasePresenter;
+import org.zpcat.ble.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
     private DataManager mDataManager;
 
     private Subscription mScanSubscription;
-    private List<Subscription> mConnectSubsciptions;
+    private final List<Subscription> mConnectSubsciptions;
 
     @Inject
     public CentralPresenter(DataManager dataManager) {
@@ -37,6 +38,12 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
         super.attachView(centralView);
 
         // send all deivces to view here;
+        //List<BluetoothDevice> devices = mDataManager.getRemoteDevices();
+        List<BLEDataServer.BLEData> datas = mDataManager.getRemoteBLEDatas();
+
+        for(BLEDataServer.BLEData data: datas) {
+            getMvpView().showBLEData(data);
+        }
     }
 
     @Override
@@ -51,6 +58,15 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
         }
 
         mConnectSubsciptions.clear();
+    }
+
+    public void getRemoteDevices() {
+
+        List<BLEDataServer.BLEData> datas = mDataManager.getRemoteBLEDatas();
+
+        for(BLEDataServer.BLEData data: datas) {
+            getMvpView().showBLEDevice(data.device);
+        }
     }
 
     public void scanBLEPeripheral(boolean enabled) {
@@ -84,18 +100,20 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
     public void connectGatt(BluetoothDevice device) {
         checkViewAttached();
 
+        // debugs here! if connect same bluetoothDevice multi times
+        
         Subscription s = mDataManager.connectGatt(device)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<BLEDataServer.BLEData>() {
                     @Override
                     public void onCompleted() {
-
+                        Log.d("Gatt connection completed");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d(e.toString());
                     }
 
                     @Override

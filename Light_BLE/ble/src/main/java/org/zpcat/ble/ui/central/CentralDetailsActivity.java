@@ -199,7 +199,7 @@ public class CentralDetailsActivity extends BaseActivity implements CentralMvpVi
     @Override
     public void onStop() {
         super.onStop();
-        
+
         stopReadRssi();
         mCentralPresenter.detachView();
     }

@@ -23,8 +23,8 @@ public class DataManager {
         mBLEServer = bleServer;
     }
 
-    public List<BluetoothDevice> getRemoteDevices() {
-        return mBLEServer.getRemoteDevices();
+    public List<BLEDataServer.BLEData> getRemoteBLEDatas() {
+        return mBLEServer.getRemoteBLEDatas();
     }
 
     public Observable<BluetoothDevice> scanBLEPeripheral(boolean enabled) {
