@@ -34,6 +34,11 @@ public class BLEDataServer {
 
     private Subscriber<BluetoothDevice> mLEScanSubscriber;
 
+    // BlueGatt -> BLEData
+    // BlueGatt -> subscriber
+    private List<BLEData> mBLEDatas = new ArrayList<>();
+    private Map<Subscriber<BLEData>, BluetoothGatt> mGattMap = new HashMap<>();
+
     private ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
@@ -192,6 +197,26 @@ public class BLEDataServer {
         });
     }
 
+    public List<BluetoothDevice> getRemoteDevices() {
+        List<BluetoothDevice> devices = new ArrayList<>();
+
+        for (BLEData data : mBLEDatas) {
+            devices.add(data.device);
+        }
+
+        return devices;
+    }
+
+    public boolean readRemoteRssi(BluetoothDevice device) {
+        BluetoothGatt gatt = findBluetoothGatt(device);
+
+        if (gatt != null) {
+            return gatt.readRemoteRssi();
+        }
+
+        return false;
+    }
+
     private BluetoothGatt findBluetoothGatt(BluetoothDevice device) {
         for (BluetoothGatt d : mGattMap.values()) {
             if (d.getDevice() == device) {
@@ -226,11 +251,6 @@ public class BLEDataServer {
 
         return d;
     }
-
-    // BlueGatt -> BLEData
-    // BlueGatt -> subscriber
-    private List<BLEData> mBLEDatas = new ArrayList<>();
-    private Map<Subscriber<BLEData>, BluetoothGatt> mGattMap = new HashMap<>();
 
     public class BLEData {
         public BluetoothDevice device;

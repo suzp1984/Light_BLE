@@ -35,6 +35,8 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
     @Override
     public void attachView(CentralMvpView centralView) {
         super.attachView(centralView);
+
+        // send all deivces to view here;
     }
 
     @Override
@@ -103,5 +105,9 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
                 });
 
         mConnectSubsciptions.add(s);
+    }
+
+    public boolean readRemoteRssi(BluetoothDevice device) {
+        return mDataManager.readRemoteRssi(device);
     }
 }

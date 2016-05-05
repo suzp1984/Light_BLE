@@ -50,19 +50,19 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
         if (data != null) {
             if (data.connectedState) {
                 holder.deviceCard.setBackgroundResource(R.color.colorPrimary);
-                holder.deviceState.setText("Connected");
+                holder.deviceState.setText("State: Connected");
             } else {
                 holder.deviceCard.setBackgroundResource(R.color.disconnect);
-                holder.deviceState.setText("Disconnected");
+                holder.deviceState.setText("State: Disconnected");
             }
 
-            holder.deviceRSSI.setText(" " + data.rssi);
+            holder.deviceRSSI.setText("Rssi: " + data.rssi);
         }
 
         holder.deviceCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListener != null) {
+                if (mListener != null && mLeDevices.size() > position) {
                     mListener.onItemClicked(mLeDevices.get(position), position);
                 }
             }
@@ -87,6 +87,10 @@ public class LeDeviceAdapter extends RecyclerView.Adapter<LeDeviceAdapter.Device
             mLeDevices.add(device);
         }
 
+    }
+
+    public void clearDevices() {
+        mLeDevices.clear();
     }
 
     public void showBLEData(BLEDataServer.BLEData data) {

@@ -2,6 +2,8 @@ package org.zpcat.ble.data;
 
 import android.bluetooth.BluetoothDevice;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -21,11 +23,19 @@ public class DataManager {
         mBLEServer = bleServer;
     }
 
+    public List<BluetoothDevice> getRemoteDevices() {
+        return mBLEServer.getRemoteDevices();
+    }
+
     public Observable<BluetoothDevice> scanBLEPeripheral(boolean enabled) {
         return mBLEServer.scanBLEPeripheral(enabled);
     }
 
     public Observable<BLEDataServer.BLEData> connectGatt(BluetoothDevice device) {
         return mBLEServer.connect(device);
+    }
+
+    public boolean readRemoteRssi(BluetoothDevice device) {
+        return mBLEServer.readRemoteRssi(device);
     }
 }
