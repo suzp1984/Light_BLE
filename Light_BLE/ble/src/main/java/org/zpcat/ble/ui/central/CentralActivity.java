@@ -83,7 +83,7 @@ public class CentralActivity extends BaseActivity {
         }
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, new DeviceScanFragment(), "scan")
+                .add(R.id.content, new CentralScanFragment(), "scan")
                 .commit();
     }
 

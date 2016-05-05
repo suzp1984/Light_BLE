@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
+public class CentralScanFragment extends BaseFragment implements CentralMvpView {
 
     private final int BLE_SCAN_PEROID = 10000;
 
@@ -139,7 +139,7 @@ public class DeviceScanFragment extends BaseFragment implements CentralMvpView {
         try {
             mCentralPresenter.scanBLEPeripheral(enable);
         } catch (BasePresenter.MvpViewNotAttachedException e) {
-            Log.e(DeviceScanFragment.class.getName(), e.toString());
+            Log.e(CentralScanFragment.class.getName(), e.toString());
             return;
         }
 

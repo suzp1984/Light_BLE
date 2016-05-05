@@ -7,7 +7,6 @@ import android.bluetooth.le.BluetoothLeScanner;
 import org.zpcat.ble.BluetoothLeService;
 import org.zpcat.ble.data.BLEDataServer;
 import org.zpcat.ble.data.DataManager;
-import org.zpcat.ble.ui.central.DeviceScanFragment;
 import org.zpcat.ble.injector.module.ApplicationModule;
 
 import javax.inject.Singleton;
