@@ -44,7 +44,7 @@ public class CentralScanFragment extends BaseFragment implements CentralMvpView 
     @Inject
     CentralPresenter mCentralPresenter;
 
-    private List<BluetoothDevice> mRemoteDevices = new ArrayList<>();
+    private final List<BluetoothDevice> mRemoteDevices = new ArrayList<>();
 
     private static final int READ_RSSI_REPEAT = 1;
     private final long READING_RSSI_TASK_FREQENCY = 2000;

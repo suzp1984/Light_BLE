@@ -8,6 +8,8 @@ import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -120,6 +122,37 @@ public class CentralDetailsActivity extends BaseActivity implements CentralMvpVi
                     return false;
                 }
             };
+
+    private static final int READ_RSSI_REPEAT = 1;
+    private final long READING_RSSI_TASK_FREQENCY = 2000;
+    private BluetoothDevice mRemoteDevice;
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case READ_RSSI_REPEAT:
+                    mCentralPresenter.readRemoteRssi(mRemoteDevice);
+
+                    sendMessageDelayed(obtainMessage(READ_RSSI_REPEAT),
+                            READING_RSSI_TASK_FREQENCY);
+                    break;
+            }
+        }
+    };
+
+    private void startReadRssi() {
+        if (mHandler.hasMessages(READ_RSSI_REPEAT)) {
+            return;
+        }
+
+        mHandler.sendEmptyMessage(READ_RSSI_REPEAT);
+    }
+
+    private void stopReadRssi() {
+        mHandler.removeMessages(READ_RSSI_REPEAT);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +170,8 @@ public class CentralDetailsActivity extends BaseActivity implements CentralMvpVi
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+
+        mRemoteDevice = mBtAdapter.getRemoteDevice(mDeviceAddress);
 
         // Sets up UI references.
         if (mDeviceAddress != null) {
@@ -156,19 +191,23 @@ public class CentralDetailsActivity extends BaseActivity implements CentralMvpVi
 
         mCentralPresenter.attachView(this);
 
-        mCentralPresenter.connectGatt(mBtAdapter.getRemoteDevice(mDeviceAddress));
+        mCentralPresenter.connectGatt(mRemoteDevice);
+
+        startReadRssi();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
+        
+        stopReadRssi();
         mCentralPresenter.detachView();
     }
 
     @Override
     public void showBLEDevice(BluetoothDevice bt) {
         // do nothing here
+
     }
 
     @Override
