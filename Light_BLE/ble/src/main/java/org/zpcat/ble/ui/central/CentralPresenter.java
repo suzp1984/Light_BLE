@@ -101,7 +101,7 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
         checkViewAttached();
 
         // debugs here! if connect same bluetoothDevice multi times
-        
+
         Subscription s = mDataManager.connectGatt(device)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

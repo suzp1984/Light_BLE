@@ -3,11 +3,16 @@ package org.zpcat.ble.injector.module;
 import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.AdvertiseData;
+import android.bluetooth.le.AdvertiseSettings;
+import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.zpcat.ble.data.BLEDataServer;
+import org.zpcat.ble.data.BLEPeripheralServer;
 import org.zpcat.ble.data.DataManager;
 import org.zpcat.ble.injector.ApplicationContext;
 
@@ -54,6 +59,33 @@ public class ApplicationModule {
         return btAdapter.getBluetoothLeScanner();
     }
 
+    @Provides
+    @Singleton
+    public AdvertiseSettings.Builder provideAdvertiseSettingsBuilder() {
+        AdvertiseSettings.Builder builder = new AdvertiseSettings.Builder();
+        builder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+        builder.setConnectable(true);
+        builder.setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
+
+        return builder;
+    }
+
+    @Provides
+    @Singleton
+    public AdvertiseData.Builder provideAdvertiseDataBuilder() {
+        AdvertiseData.Builder builder = new AdvertiseData.Builder();
+        builder.setIncludeDeviceName(true);
+        builder.setIncludeTxPowerLevel(true);
+
+        return builder;
+    }
+
+  /*  @Provides
+    @Singleton
+    public BLEPeripheralServer provideBLEPeripheralServer(@ApplicationContext Context context) {
+        return new BLEPeripheralServer(context);
+    }
+*/
     /*@Singleton
     @Provides
     public DataManager provideDataManager(BLEDataServer bleDataServer) {

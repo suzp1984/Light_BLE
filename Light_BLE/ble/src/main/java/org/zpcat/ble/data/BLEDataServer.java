@@ -31,6 +31,7 @@ public class BLEDataServer {
 
     private Context mContext;
     private BluetoothLeScanner mLeScanner;
+    private BLEPeripheralServer mPeripheralServer;
 
     private Subscriber<BluetoothDevice> mLEScanSubscriber;
 
@@ -153,9 +154,10 @@ public class BLEDataServer {
     };
 
     @Inject
-    public BLEDataServer(@ApplicationContext Context context, BluetoothLeScanner leScanner) {
+    public BLEDataServer(@ApplicationContext Context context, BluetoothLeScanner leScanner, BLEPeripheralServer peripheralServer) {
         mContext = context;
         mLeScanner = leScanner;
+        mPeripheralServer = peripheralServer;
     }
 
     Observable<BluetoothDevice> scanBLEPeripheral(final boolean enabled) {
@@ -209,6 +211,31 @@ public class BLEDataServer {
         }
 
         return false;
+    }
+
+    public void startCentralMode() {
+        // stop Peripheral Mode first
+        stopPeripheralMode();
+    }
+
+    public void stopCentralMode() {
+        // stop scan
+        // disconnect from all gatt
+    }
+
+    public boolean supportLEAdvertiser() {
+        return mPeripheralServer.supportPeripheralMode();
+    }
+
+    public void startPeripheralMode(String name) {
+        // stop Central mode first
+        stopCentralMode();
+
+        mPeripheralServer.startPeripheralMode(name);
+    }
+
+    public void stopPeripheralMode() {
+        mPeripheralServer.stopPeripheralMode();
     }
 
     private BluetoothGatt findBluetoothGatt(BluetoothDevice device) {

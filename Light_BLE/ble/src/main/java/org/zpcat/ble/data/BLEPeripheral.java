@@ -1,4 +1,4 @@
-package org.zpcat.ble;
+package org.zpcat.ble.data;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -322,7 +322,6 @@ public class BLEPeripheral {
         };
 
         thread.start();
-
 
         mGattServer.addService(AService);
     }

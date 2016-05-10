@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by jacobsu on 4/27/16.
@@ -21,6 +20,14 @@ public class DataManager {
     @Inject
     public DataManager(BLEDataServer bleServer) {
         mBLEServer = bleServer;
+    }
+
+    public void startCentralMode() {
+        mBLEServer.startCentralMode();
+    }
+
+    public void stopCentralMode() {
+        mBLEServer.stopCentralMode();
     }
 
     public List<BLEDataServer.BLEData> getRemoteBLEDatas() {
@@ -37,5 +44,17 @@ public class DataManager {
 
     public boolean readRemoteRssi(BluetoothDevice device) {
         return mBLEServer.readRemoteRssi(device);
+    }
+
+    public boolean supportAdvertiser() {
+        return mBLEServer.supportLEAdvertiser();
+    }
+
+    public void startPeripheralMode(String name) {
+        mBLEServer.startPeripheralMode(name);
+    }
+
+    public void stopPeripheralMode() {
+        mBLEServer.stopPeripheralMode();
     }
 }
