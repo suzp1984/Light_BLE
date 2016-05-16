@@ -1,6 +1,39 @@
 Light_BLE
 =========
 
+Release Note Beta 2
+-------------------
+
+1. New Architecture
+
+I rewrite this project to compatible with the legendary MVP architecture, which decoupled the View and logical data layer, make your code rocks. And, the MVP don’t just became a pattern, but a boilerplate. But in order to practice it, some top technologies were required, you need to understand those bleeding edge technologies first, such as Dependency Injection and ReactiveX protocol.
+
+The good news is that I already wrote some articles to introduce those two technologies, The most popular Dependency Injection(DI) implementation is Dagger, which is first open sourced by Square, named Dagger 1; then refactor and maintained by Google, named Dagger 2. Both of them are developed and maintained separately, the version 2 is not more advanced than version 1, but I recommend Google’s Dagger 2, which just much more easy to use.
+
+Then, it is the sensational ReactiveX, which implemented the Observer pattern, and provides an elegant way to design and write asynchronous code to avoid the callback hell and mess threading codes. I like ReactiveX. There is multiple Language implementation of ReactiveX, Rxjava is just one of them, so to understand Rx is to understand Rx operations. I wrote an article to illustrate Reactive Operations and also some demo codes.
+
+For gratitude and announcement, I learned MVP pattern by reading ribot’s blog post, and also its excellent android boilerplate sample code.
+
+2. Upgrade to New SDK
+
+The only question that in my emails, which from the Light-BLE users, is that it stop works anymore. Then debugs become the primary target during this upgrade.
+The reason of Light-BLE stop works is that the runtime permission features of Android 6.0. Whether you install Light-BLE in Android 6.0 phone or upgrade compiler SDK to 6.0, it can not scan any types of equipments. That’s because, at Android 6.0, it require Location permission during any kinds of Bluetooth scanning, but Location permission belongs to the runtime permission. It should be checked and send request at the code runtime.
+
+3. A good way to wrote BLE code
+
+New code support builds multiple Gatt Connections at the same time, and abandoned the dependency on the Service component, the old sample code came from the official document. They are ugly for two reasons: it coupled with an Android component, Service; it can not support multiple connectable channels with more than one BLE peripheral devices. Fortunately, new code solved all those troubles, and I can tell other people I once developed BLE devices because those boilerplate codes can be used in production.
+
+4. Still unfinished tasks
+
+From Android 5.0, Bluetooth LE API was upgraded to support wrote code in Peripheral mode, before that, since the first release of Bluetooth LE at Android 4.3, only Central mode programming was supported. At this upgrade, I rewrote the code with the new API and remove the deprecated API in Android 5.0.
+
+But, the peripheral mode coding guide can not be found in the official document, the lack of document was fatal; and my Nexus 5 do not support peripheral mode. For those two reasons, I can not test and develop Peripheral mode anymore. I believe it is time to leave it alone. This may be my last release.
+
+And I also deleted the code to wrote the character to the remote Gatt Service. Again, no equipment to do the test.
+
+Release Note Beta 1
+-------------------
+
 An enhanced android app to communicate with Bluetooth LE peripheral.
 
 This app maybe useful in Bluetooth Low Energy peripheral equipment 
