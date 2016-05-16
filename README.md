@@ -4,26 +4,26 @@ Light_BLE
 Release Note Beta 2
 -------------------
 
-1. New Architecture
+* New Architecture
 
-I rewrite this project to compatible with the legendary MVP architecture, which decoupled the View and logical data layer, make your code rocks. And, the MVP don’t just became a pattern, but a boilerplate. But in order to practice it, some top technologies were required, you need to understand those bleeding edge technologies first, such as Dependency Injection and ReactiveX protocol.
+I rewrite this project to compatible with the legendary MVP architecture, which decoupled the View and logical data layer, make your code rocks. And, the MVP don’t just became a pattern, but a boilerplate. But in order to practice it, some top technologies were required, you need to understand those bleeding edge technologies first, such as [Dependency Injection](http://zpcat.blogspot.com/2016/04/dependency-injection-in-android-with.html) and [ReactiveX protocol](http://zpcat.blogspot.com/2016/04/reactivex-operations.html).
 
-The good news is that I already wrote some articles to introduce those two technologies, The most popular Dependency Injection(DI) implementation is Dagger, which is first open sourced by Square, named Dagger 1; then refactor and maintained by Google, named Dagger 2. Both of them are developed and maintained separately, the version 2 is not more advanced than version 1, but I recommend Google’s Dagger 2, which just much more easy to use.
+The good news is that I already wrote some articles to introduce those two technologies, The most popular Dependency Injection(DI) implementation is Dagger, which is first open sourced by Square, named [Dagger 1](http://square.github.io/dagger/); then refactor and maintained by Google, named [Dagger 2](http://google.github.io/dagger/users-guide.html). Both of them are developed and maintained separately, the version 2 is not more advanced than version 1, but I recommend Google’s [Dagger 2](http://google.github.io/dagger/users-guide.html), which just much more easy to use.
 
-Then, it is the sensational ReactiveX, which implemented the Observer pattern, and provides an elegant way to design and write asynchronous code to avoid the callback hell and mess threading codes. I like ReactiveX. There is multiple Language implementation of ReactiveX, Rxjava is just one of them, so to understand Rx is to understand Rx operations. I wrote an article to illustrate Reactive Operations and also some demo codes.
+Then, it is the sensational [ReactiveX](http://reactivex.io/), which implemented the Observer pattern, and provides an elegant way to design and write asynchronous code to avoid the callback hell and mess threading codes. I like ReactiveX. There is multiple Language implementation of ReactiveX, Rxjava is just one of them, so to understand Rx is to understand [Rx operations](http://zpcat.blogspot.com/2016/04/reactivex-operations.html). I wrote an article to illustrate [Reactive Operations](http://zpcat.blogspot.com/2016/04/reactivex-operations.html) and also some demo codes.
 
-For gratitude and announcement, I learned MVP pattern by reading ribot’s blog post, and also its excellent android boilerplate sample code.
+For gratitude and announcement, I learned MVP pattern by reading [ribot’s blog post](https://labs.ribot.co.uk/android-application-architecture-8b6e34acda65#.g4juxsf55), and also its excellent [android boilerplate](https://github.com/ribot/android-boilerplate) sample code.
 
-2. Upgrade to New SDK
+* Upgrade to New SDK
 
 The only question that in my emails, which from the Light-BLE users, is that it stop works anymore. Then debugs become the primary target during this upgrade.
 The reason of Light-BLE stop works is that the runtime permission features of Android 6.0. Whether you install Light-BLE in Android 6.0 phone or upgrade compiler SDK to 6.0, it can not scan any types of equipments. That’s because, at Android 6.0, it require Location permission during any kinds of Bluetooth scanning, but Location permission belongs to the runtime permission. It should be checked and send request at the code runtime.
 
-3. A good way to wrote BLE code
+* A good way to wrote BLE code
 
 New code support builds multiple Gatt Connections at the same time, and abandoned the dependency on the Service component, the old sample code came from the official document. They are ugly for two reasons: it coupled with an Android component, Service; it can not support multiple connectable channels with more than one BLE peripheral devices. Fortunately, new code solved all those troubles, and I can tell other people I once developed BLE devices because those boilerplate codes can be used in production.
 
-4. Still unfinished tasks
+* Still unfinished tasks
 
 From Android 5.0, Bluetooth LE API was upgraded to support wrote code in Peripheral mode, before that, since the first release of Bluetooth LE at Android 4.3, only Central mode programming was supported. At this upgrade, I rewrote the code with the new API and remove the deprecated API in Android 5.0.
 
