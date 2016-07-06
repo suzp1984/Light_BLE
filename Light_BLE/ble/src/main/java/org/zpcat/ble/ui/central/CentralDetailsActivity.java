@@ -179,10 +179,6 @@ public class CentralDetailsActivity extends BaseActivity implements CentralMvpVi
         }
 
         mGattServicesList.setOnChildClickListener(mServicesListClickListener);
-        mConnectionState = (TextView) findViewById(R.id.connection_state);
-        mDataField = (TextView) findViewById(R.id.data_value);
-        mRssiField = (TextView) findViewById(R.id.signal_rssi);
-
     }
 
     @Override
