@@ -26,15 +26,43 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.central.CentralActivity"/>
-        <activity android:name=".ui.central.CentralDetailsActivity"/>
-        <activity android:name=".ui.central.DeviceControlActivity" />
+
+        <activity
+            android:name=".ui.central.CentralActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="zpcat.ble.action.central.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.central.CentralDetailsActivity"
+            android:exported="false">
+
+        </activity>
+
+        <activity
+            android:name=".ui.central.DeviceControlActivity"
+            android:exported="false">
+
+        </activity>
 
         <service
             android:name=".BluetoothLeService"
+            android:exported="false"
             android:enabled="true" />
 
-        <activity android:name=".ui.peripheral.PeripheralActivity"/>
+        <activity
+            android:name=".ui.peripheral.PeripheralActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="zpcat.ble.action.peripheral.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

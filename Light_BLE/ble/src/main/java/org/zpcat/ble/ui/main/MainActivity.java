@@ -19,6 +19,7 @@ import org.zpcat.ble.ui.peripheral.PeripheralActivity;
 import org.zpcat.ble.R;
 import org.zpcat.ble.fragment.PermissionAgreeFragment;
 import org.zpcat.ble.ui.base.BaseActivity;
+import org.zpcat.ble.utils.BLEIntents;
 
 import javax.inject.Inject;
 
@@ -109,14 +110,14 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     @OnClick(R.id.central)
     public void startCentralMode() {
         if (checkLocationPermission()) {
-            startActivity(new Intent(this, CentralActivity.class));
+            startActivity(new Intent(BLEIntents.ACTION_CENTRAL_MODE));
         }
     }
 
     @Override
     @OnClick(R.id.peripheral)
     public void startPeripheralMode() {
-        startActivity(new Intent(this, PeripheralActivity.class));
+        startActivity(new Intent(BLEIntents.ACTION_PERIPHERAL_MODE));
     }
 
     @Override
