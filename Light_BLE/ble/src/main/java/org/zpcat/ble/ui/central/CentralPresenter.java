@@ -12,10 +12,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Created by jacobsu on 4/27/16.
@@ -24,13 +27,13 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
 
     private DataManager mDataManager;
 
-    private Subscription mScanSubscription;
-    private final List<Subscription> mConnectSubsciptions;
+    private Disposable   mScanDisposable;
+    private final List<Disposable>  mConnectedDisposable;
 
     @Inject
     public CentralPresenter(DataManager dataManager) {
         mDataManager = dataManager;
-        mConnectSubsciptions = new ArrayList<>();
+        mConnectedDisposable = new ArrayList<>();
     }
 
     @Override
@@ -49,15 +52,17 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mScanSubscription != null) {
-            mScanSubscription.unsubscribe();
+        if (mScanDisposable != null && !mScanDisposable.isDisposed()) {
+            mScanDisposable.dispose();
         }
 
-        for (Subscription s : mConnectSubsciptions) {
-            s.unsubscribe();
+        for (Disposable s : mConnectedDisposable) {
+            if (s.isDisposed()) {
+                s.dispose();
+            }
         }
 
-        mConnectSubsciptions.clear();
+        mConnectedDisposable.clear();
     }
 
     public void getRemoteDevices() {
@@ -72,26 +77,16 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
     public void scanBLEPeripheral(boolean enabled) {
         checkViewAttached();
 
-        if (mScanSubscription != null) {
-            mScanSubscription.unsubscribe();
+        if (mScanDisposable != null && !mScanDisposable.isDisposed()) {
+            mScanDisposable.dispose();
         }
 
-        mScanSubscription = mDataManager.scanBLEPeripheral(enabled)
+        mScanDisposable = mDataManager.scanBLEPeripheral(enabled)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<BluetoothDevice>() {
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Consumer<BluetoothDevice>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(BluetoothDevice bluetoothDevice) {
+                    public void accept(BluetoothDevice bluetoothDevice) throws Exception {
                         getMvpView().showBLEDevice(bluetoothDevice);
                     }
                 });
@@ -102,27 +97,19 @@ public class CentralPresenter extends BasePresenter<CentralMvpView> {
 
         // debugs here! if connect same bluetoothDevice multi times
 
-        Subscription s = mDataManager.connectGatt(device)
+        Disposable s = mDataManager.connectGatt(device)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<BLEDataServer.BLEData>() {
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Consumer<BLEDataServer.BLEData>() {
                     @Override
-                    public void onCompleted() {
-                        Log.d("Gatt connection completed");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(BLEDataServer.BLEData bleData) {
-                        getMvpView().showBLEData(bleData);
+                    public void accept(BLEDataServer.BLEData bleData) throws Exception {
+                        if (isViewAttached()) {
+                            getMvpView().showBLEData(bleData);
+                        }
                     }
                 });
 
-        mConnectSubsciptions.add(s);
+        mConnectedDisposable.add(s);
     }
 
     public boolean readRemoteRssi(BluetoothDevice device) {
