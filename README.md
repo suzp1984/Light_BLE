@@ -1,7 +1,7 @@
 Light_BLE
 =========
 
-![screen shot](https://github.com/suzp1984/Light_BLE/raw/master/imgs/screenshot.png)
+![screen shot](https://github.com/suzp1984/Light_BLE/raw/master/images/screenshot.png)
 
 Release Note Beta 2
 -------------------
