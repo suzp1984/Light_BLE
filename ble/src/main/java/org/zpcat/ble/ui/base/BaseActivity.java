@@ -2,8 +2,9 @@ package org.zpcat.ble.ui.base;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.zpcat.ble.BLEApplication;
 import org.zpcat.ble.injector.component.ActivityComponent;

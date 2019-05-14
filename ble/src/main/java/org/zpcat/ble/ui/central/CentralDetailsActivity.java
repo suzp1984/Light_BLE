@@ -10,11 +10,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
 
 import org.zpcat.ble.R;
 import org.zpcat.ble.SampleGattAttributes;
